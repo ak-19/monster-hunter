@@ -8,9 +8,9 @@ class Monster(pygame.sprite.Sprite):
         super().__init__()
         self.image = pygame.image.load('assets/monster.png')
         self.rect = self.image.get_rect()
-        self.x, self.y = randint(0, Screen.WIDTH - 64), randint(0, Screen.HEIGHT - 64)
+        self.x, self.y = x, y
         self.rect.topleft = (self.x, self.y)
 
     def update(self):
-        self.x, self.y = randint(0, Screen.WIDTH - 64), randint(0, Screen.HEIGHT - 64)
+        self.y += randint(0, 5)
         self.rect.topleft = (self.x, self.y)

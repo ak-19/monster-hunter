@@ -1,3 +1,4 @@
+from random import randint
 import pygame
 
 from hero import Hero
@@ -10,10 +11,13 @@ class Game:
         self.run = True
         self.fps = 60
         self.clock = pygame.time.Clock()
-        self.hero_group = pygame.sprite.Group(Hero(400, 500))
+        self.hero_group = pygame.sprite.Group()
+        for i in range(10): 
+            self.hero_group.add(Hero(100*i, 700))
+
         self.monster_group = pygame.sprite.Group()
-        for i in range(10):
-            self.monster_group.add(Monster(80*i, 50))
+        for i in range(10): 
+            self.monster_group.add(Monster(100*i, randint(-120,200)))
 
     def run_game_loop(self):
 
@@ -27,6 +31,8 @@ class Game:
             self.display.fill((0,0,0))
 
             self.hero_group.update()
+            self.monster_group.update()
+
             pygame.sprite.groupcollide(self.hero_group, self.monster_group, False, True)
                         
             self.hero_group.draw(self.display)
