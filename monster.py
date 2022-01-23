@@ -5,15 +5,27 @@ import pygame
 
 from screen import Screen
 
-class MonsterType(Enum):
-    Green = 1
-    Purple = 2
-    Blue = 3
+class MonsterType():
+    Green = 0
+    Orange = 1
+    Blue = 2
+    Purple = 3
+
+class MonsterTypeImage():
+    def __init__(self) -> None:
+        self.images = [pygame.image.load('assets/green_monster.png'), pygame.image.load('assets/orange_monster.png'), pygame.image.load('assets/blue_monster.png'), pygame.image.load('assets/purple_monster.png')]        
+
+    def get_image(self, monster_type: MonsterType):
+        return self.images[monster_type]
+
+    def get_random_type(self):
+        return randint(0,3)
 
 class Monster(pygame.sprite.Sprite):
-    def __init__(self, x, y, image, monster_type: MonsterType) -> None:
-        super().__init__()
-        self.image = image
+    def __init__(self, x, y, monster_type: MonsterType) -> None:
+        super().__init__()    
+        monsterTypeImage = MonsterTypeImage()    
+        self.image = monsterTypeImage.get_image(monster_type)
         self.rect = self.image.get_rect()
         self.rect.topleft = (x, y)     
 
@@ -24,11 +36,11 @@ class Monster(pygame.sprite.Sprite):
         self.velocity = randint(1, 5)
 
     def update(self):
-        if self.rect.y + self.velocity * self.dy + 64 > Screen.HEIGHT or self.rect.y + self.velocity * self.dy < 0:
-            self.dy *= -1
-
-        if self.rect.x + self.velocity * self.dx + 64 > Screen.WIDTH or self.rect.x + self.velocity * self.dx < 0:
-            self.dx *= -1
-
         self.rect.y += self.velocity * self.dy
         self.rect.x += self.velocity * self.dx
+
+        if self.rect.y + self.velocity * self.dy + 64 >= Screen.HEIGHT or self.rect.y + self.velocity * self.dy <= 0:
+            self.dy *= -1
+
+        if self.rect.x + self.velocity * self.dx + 64 >= Screen.WIDTH or self.rect.x + self.velocity * self.dx <= 0:
+            self.dx *= -1
