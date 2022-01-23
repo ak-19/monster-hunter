@@ -1,5 +1,6 @@
 import pygame
 from random import randint
+from monster import Monster, MonsterType
 
 from monster_blue import MonsterBlue
 from monster_green import MonsterGreen
@@ -26,7 +27,7 @@ class Game:
     def make_monsters(self):
         self.monster_group = pygame.sprite.Group()
         for i in range(10): 
-            self.monster_group.add(MonsterBlue(100*i, randint(-120,200)))
+            self.monster_group.add(Monster(100*i, randint(0,200),  pygame.image.load('assets/purple_monster.png'), MonsterType.Purple))
 
     def make_player(self):
         self.player_group = pygame.sprite.Group()
