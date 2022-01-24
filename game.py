@@ -1,6 +1,6 @@
 import pygame
 from random import randint
-from monster import Monster, MonsterType
+from monster import Monster, MonsterType, MonsterTypeImage
 
 from text import Text
 from player import Player
@@ -17,22 +17,23 @@ class Game:
         self.sound = Sound()
         self.text = Text(display)
 
+        self.monsterTypeImage = MonsterTypeImage()   
+
         self.make_player()
         self.make_monsters()
-
 
         self.score = 0
         self.round_number = 0
         self.round_time = 0
         self.frame_count = 0
-        
+
 
     def make_monsters(self):
         self.monster_group = pygame.sprite.Group()
-        self.monster_group.add(Monster(100*1, randint(0,200), MonsterType.Orange))
-        self.monster_group.add(Monster(100*1, randint(0,200), MonsterType.Green))
-        self.monster_group.add(Monster(100*5, randint(0,300), MonsterType.Blue))
-        self.monster_group.add(Monster(100*5, randint(0,300), MonsterType.Purple))
+        self.monster_group.add(Monster(100*1, randint(0,200), self.monsterTypeImage))
+        self.monster_group.add(Monster(100*1, randint(0,200), self.monsterTypeImage))
+        self.monster_group.add(Monster(100*5, randint(0,300), self.monsterTypeImage))
+        self.monster_group.add(Monster(100*5, randint(0,300), self.monsterTypeImage))
 
     def make_player(self):
         self.player_group = pygame.sprite.Group()
