@@ -28,13 +28,15 @@ class Game:
         self.round_time = 0
         self.frame_count = 0
 
+        self.start_new_round()
+
 
     def make_monsters(self):
         self.monster_group = pygame.sprite.Group()
-        self.monster_group.add(Monster(100*1, randint(100,200), self.monsterTypeImage))
-        self.monster_group.add(Monster(100*1, randint(100,200), self.monsterTypeImage))
-        self.monster_group.add(Monster(100*5, randint(100,300), self.monsterTypeImage))
-        self.monster_group.add(Monster(100*5, randint(100,300), self.monsterTypeImage))
+        self.monster_group.add(Monster(100*1, randint(Screen.TOP_BORDER, Screen.BOTTOM_BORDER - Screen.TOP_BORDER), self.monsterTypeImage))
+        self.monster_group.add(Monster(100*1, randint(Screen.TOP_BORDER, Screen.BOTTOM_BORDER - Screen.TOP_BORDER), self.monsterTypeImage))
+        self.monster_group.add(Monster(100*5, randint(Screen.TOP_BORDER, Screen.BOTTOM_BORDER - Screen.TOP_BORDER), self.monsterTypeImage))
+        self.monster_group.add(Monster(100*5, randint(Screen.TOP_BORDER, Screen.BOTTOM_BORDER - Screen.TOP_BORDER), self.monsterTypeImage))
 
     def make_player(self):
         self.player = Player()
@@ -44,20 +46,25 @@ class Game:
     def update(self):
         self.player_group.update()
         self.monster_group.update()
+        self.round_time += 1
         pygame.sprite.groupcollide(self.player_group, self.monster_group, False, True)
 
     def draw(self):
         self.display.fill(Colors.BLACK)
 
-        self.text.top_panel(self.score, self.player.lives, self.round_time, self.player.warps )
-
+        self.text.top_panel(self.monsterTypeImage.get_image(self.curr_catch), 
+                            self.score, 
+                            self.player.lives, 
+                            self.round_time, 
+                            self.player.warps, 
+                            self.round_number )
 
         self.player_group.draw(self.display)
         self.monster_group.draw(self.display)        
         pygame.display.update()
 
     def start_new_round(self):
-        pass
+        self.curr_catch = self.monsterTypeImage.get_random_type()
 
     def check_collisions(self):
         pass

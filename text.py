@@ -15,27 +15,32 @@ class Text:
         game_over_text_rect = game_over_text.get_rect()
         game_over_text_rect.center = (Screen.WIDTH // 2, Screen.HEIGHT // 2)
         self.display.blit(game_over_text, game_over_text_rect)
+
+    def blit_this_at(self, text, text_param, pos, left_align = True):
+        text = self.top_panel_font.render(f'{text} {text_param}', True, (255, 255, 255), (0, 0, 0))
+        rect = text.get_rect()
+        if left_align: rect.topleft = pos
+        else: rect.topright = pos   
+        self.display.blit(text, rect)        
         
-    def top_panel(self, score, lives, round_time, warps):
-        pygame.draw.rect(self.display, Colors.WHITE, (1,1,Screen.WIDTH - 2, 100), 2)
+    def top_panel(self, catch_image, score, lives, round_time, warps, round_number):
+        pygame.draw.rect(self.display, Colors.GREEN, (1, Screen.TOP_BORDER, Screen.WIDTH - 2, Screen.BOTTOM_BORDER - Screen.TOP_BORDER), 2)
+
         
-        score_text = self.top_panel_font.render(f'Score: {score}', True, (255, 255, 255), (0, 0, 0))
-        score_text_rect = score_text.get_rect()
-        score_text_rect.topleft = (40, 20)
-        self.display.blit(score_text, score_text_rect)
+        catch_text = self.top_panel_font.render(f'Current catch: ', True, (255, 255, 255), (0, 0, 0))
+        catch_text_rect = catch_text.get_rect()
+        catch_text_rect.centerx = Screen.WIDTH // 2
+        catch_text_rect.centery = 20
+        self.display.blit(catch_text, catch_text_rect)
 
-        lives_text = self.top_panel_font.render(f'Lives: {lives}', True, (255, 255, 255), (0, 0, 0))
-        lives_text_rect = lives_text.get_rect()
-        lives_text_rect.topleft = (40, 60)
-        self.display.blit(lives_text, lives_text_rect)    
+        catch_image_rect = catch_image.get_rect()
+        catch_image_rect.centerx = Screen.WIDTH // 2
+        catch_image_rect.centery = 80
+        self.display.blit(catch_image, catch_image_rect)
 
-        round_text = self.top_panel_font.render(f'Round time: {round_time}', True, (255, 255, 255), (0, 0, 0))
-        round_text_rect = round_text.get_rect()
-        round_text_rect.topleft = (150, 20)
-        self.display.blit(round_text, round_text_rect)   
-
-
-        warp_text = self.top_panel_font.render(f'Warps: {warps}', True, (255, 255, 255), (0, 0, 0))
-        warp_text_rect = warp_text.get_rect()
-        warp_text_rect.topleft = (150, 60)
-        self.display.blit(warp_text, warp_text_rect)                        
+        self.blit_this_at('Score: ', score, (40, 20))
+        self.blit_this_at('Lives: ', lives, (40, 60))
+        self.blit_this_at('Current round: ', round_number, (40, 100))
+        self.blit_this_at('Round time: ', round_time // 60, (Screen.WIDTH - 20, 20), False)
+        self.blit_this_at('Warps: ', warps, (Screen.WIDTH - 20, 60), False)
+                          
