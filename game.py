@@ -12,6 +12,7 @@ class Game:
     def __init__(self, display) -> None:
         self.display = display
         self.run = True
+        self.pause = False
         self.fps = 60
         self.clock = pygame.time.Clock()
         self.sound = Sound()
@@ -30,14 +31,15 @@ class Game:
 
     def make_monsters(self):
         self.monster_group = pygame.sprite.Group()
-        self.monster_group.add(Monster(100*1, randint(0,200), self.monsterTypeImage))
-        self.monster_group.add(Monster(100*1, randint(0,200), self.monsterTypeImage))
-        self.monster_group.add(Monster(100*5, randint(0,300), self.monsterTypeImage))
-        self.monster_group.add(Monster(100*5, randint(0,300), self.monsterTypeImage))
+        self.monster_group.add(Monster(100*1, randint(100,200), self.monsterTypeImage))
+        self.monster_group.add(Monster(100*1, randint(100,200), self.monsterTypeImage))
+        self.monster_group.add(Monster(100*5, randint(100,300), self.monsterTypeImage))
+        self.monster_group.add(Monster(100*5, randint(100,300), self.monsterTypeImage))
 
     def make_player(self):
+        self.player = Player()
         self.player_group = pygame.sprite.Group()
-        self.player_group.add(Player())        
+        self.player_group.add(self.player)        
 
     def update(self):
         self.player_group.update()
@@ -46,6 +48,10 @@ class Game:
 
     def draw(self):
         self.display.fill(Colors.BLACK)
+
+        self.text.top_panel(self.score, self.player.lives, self.round_time, self.player.warps )
+
+
         self.player_group.draw(self.display)
         self.monster_group.draw(self.display)        
         pygame.display.update()

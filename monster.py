@@ -39,7 +39,7 @@ class Monster(pygame.sprite.Sprite):
         self.rect.y += self.velocity * self.dy
         self.rect.x += self.velocity * self.dx
 
-        if self.rect.y + self.velocity * self.dy + 64 >= Screen.HEIGHT or self.rect.y + self.velocity * self.dy <= 0:
+        if self.rect.y + self.velocity * self.dy + 64 >= Screen.HEIGHT or self.rect.y + self.velocity * self.dy <= 100:
             self.dy *= -1
 
         if self.rect.x + self.velocity * self.dx + 64 >= Screen.WIDTH or self.rect.x + self.velocity * self.dx <= 0:
