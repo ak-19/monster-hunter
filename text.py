@@ -10,11 +10,24 @@ class Text:
         self.sub_font = pygame.font.Font('assets/Abrushow.ttf', 32)
         self.top_panel_font = pygame.font.Font('assets/Abrushow.ttf', 24)
 
-    def game_over(self):
+    def game_over(self, score):
         game_over_text = self.main_font.render('Game over', True, (255, 255, 255), (0, 0, 0))
         game_over_text_rect = game_over_text.get_rect()
         game_over_text_rect.center = (Screen.WIDTH // 2, Screen.HEIGHT // 2)
         self.display.blit(game_over_text, game_over_text_rect)
+
+
+        play_again_text = self.sub_font.render('Press "p" to play again', True, (255, 255, 255), (0, 0, 0))
+        play_again_text_text_rect = play_again_text.get_rect()
+        play_again_text_text_rect.center = (Screen.WIDTH // 2, Screen.HEIGHT // 2 + 60)
+        self.display.blit(play_again_text, play_again_text_text_rect)
+
+        score_text = self.top_panel_font.render(f'Final score: {score}', True, (255, 255, 255), (0, 0, 0))
+        score_text_rect = score_text.get_rect()
+        score_text_rect.center = (Screen.WIDTH // 2, Screen.HEIGHT // 2 - 60)
+        self.display.blit(score_text, score_text_rect)        
+
+
 
     def blit_this_at(self, text, text_param, pos, left_align = True):
         text = self.top_panel_font.render(f'{text} {text_param}', True, (255, 255, 255), (0, 0, 0))

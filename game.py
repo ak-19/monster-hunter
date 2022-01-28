@@ -53,6 +53,11 @@ class Game:
         self.monster_group.draw(self.display)        
         pygame.display.update()
 
+    def game_over_message(self):
+        self.display.fill(Colors.BLACK)
+        self.text.game_over(self.score)
+        pygame.display.update()
+
     def start_new_game(self):
         self.make_player()
         self.make_monsters()
@@ -94,7 +99,7 @@ class Game:
             if monster.type == self.curr_catch:
                 self.monster_group.remove(monster)
                 break
-        self.curr_catch = self.monster_group.sprites()[-1].type
+        self.curr_catch = choice(self.monster_group.sprites()).type
 
     def run_game_loop(self):
 
@@ -111,5 +116,7 @@ class Game:
             if not self.pause:
                 self.update()                        
                 self.draw()
+            else:
+                self.game_over_message()
             
             self.clock.tick(self.fps)
