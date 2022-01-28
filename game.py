@@ -1,5 +1,5 @@
 import pygame
-from random import randint
+from random import choice, randint
 from monster import Monster, MonsterType, MonsterTypeImage
 
 from text import Text
@@ -17,19 +17,9 @@ class Game:
         self.clock = pygame.time.Clock()
         self.sound = Sound()
         self.text = Text(display)
-
         self.monsterTypeImage = MonsterTypeImage()   
 
-        self.make_player()
-        self.make_monsters()
-
-        self.score = 0
-        self.round_number = 0
-        self.round_time = 0
-        self.frame_count = 0
-
-        self.start_new_round()
-
+        self.start_new_game()
 
     def make_monsters(self):
         self.monster_group = pygame.sprite.Group()
@@ -49,8 +39,6 @@ class Game:
         self.round_time += 1
         self.check_collisions()
                 
-
-
     def draw(self):
         self.display.fill(Colors.BLACK)
 
@@ -65,7 +53,17 @@ class Game:
         self.monster_group.draw(self.display)        
         pygame.display.update()
 
+    def start_new_game(self):
+        self.make_player()
+        self.make_monsters()
+        self.score = 0
+        self.round_number = 1
+        self.round_time = 0
+        self.curr_catch = self.monsterTypeImage.get_random_type()
+
     def start_new_round(self):
+        self.round_number += 1
+        self.round_time = 0        
         self.curr_catch = self.monsterTypeImage.get_random_type()
         self.player.reset_poistion()
         self.make_monsters()
@@ -74,11 +72,28 @@ class Game:
         collided_monster = pygame.sprite.spritecollideany(self.player, self.monster_group)
         if collided_monster:
             if collided_monster.type == self.curr_catch:
+                self.sound.catch()
                 self.score += 1
-                self.start_new_round()
+
+                if len(self.monster_group) == 1:
+                    self.start_new_round()
+                else:
+                    self.player.reset_poistion()  
+                    self.choose_new_target()     
+            else:
+                self.player.lives -= 1
+                self.sound.die()
+                self.player.reset_poistion()                
+                if self.player.lives == 0:
+                    self.pause = True                   
+
 
     def choose_new_target(self):
-        pass    
+        for  monster in self.monster_group:
+            if monster.type == self.curr_catch:
+                self.monster_group.remove(monster)
+                break
+        self.curr_catch = self.monster_group.sprites()[-1].type
 
     def run_game_loop(self):
 
@@ -87,10 +102,13 @@ class Game:
                 if event.type == pygame.QUIT:
                     self.run = False
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                    self.run = False                    
+                    self.run = False    
+                elif event.type == pygame.KEYDOWN and self.pause and event.key == pygame.K_p:
+                    self.pause = False
+                    self.start_new_game()                         
 
-            self.update()
-                        
-            self.draw()
+            if not self.pause:
+                self.update()                        
+                self.draw()
             
             self.clock.tick(self.fps)
