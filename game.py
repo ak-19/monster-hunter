@@ -62,6 +62,7 @@ class Game:
         self.curr_catch = self.monsterTypeImage.get_random_type()
 
     def start_new_round(self):
+        self.sound.next_level()
         self.round_number += 1
         self.round_time = 0        
         self.curr_catch = self.monsterTypeImage.get_random_type()
