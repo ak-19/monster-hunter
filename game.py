@@ -33,10 +33,10 @@ class Game:
 
     def make_monsters(self):
         self.monster_group = pygame.sprite.Group()
-        self.monster_group.add(Monster(100*1, randint(Screen.TOP_BORDER, Screen.BOTTOM_BORDER - Screen.TOP_BORDER), self.monsterTypeImage))
-        self.monster_group.add(Monster(100*1, randint(Screen.TOP_BORDER, Screen.BOTTOM_BORDER - Screen.TOP_BORDER), self.monsterTypeImage))
-        self.monster_group.add(Monster(100*5, randint(Screen.TOP_BORDER, Screen.BOTTOM_BORDER - Screen.TOP_BORDER), self.monsterTypeImage))
-        self.monster_group.add(Monster(100*5, randint(Screen.TOP_BORDER, Screen.BOTTOM_BORDER - Screen.TOP_BORDER), self.monsterTypeImage))
+        self.monster_group.add(Monster(100*1, randint(Screen.TOP_BORDER, Screen.BOTTOM_BORDER - Screen.TOP_BORDER), self.monsterTypeImage, MonsterType.Green))
+        self.monster_group.add(Monster(100*1, randint(Screen.TOP_BORDER, Screen.BOTTOM_BORDER - Screen.TOP_BORDER), self.monsterTypeImage, MonsterType.Blue))
+        self.monster_group.add(Monster(100*5, randint(Screen.TOP_BORDER, Screen.BOTTOM_BORDER - Screen.TOP_BORDER), self.monsterTypeImage, MonsterType.Purple))
+        self.monster_group.add(Monster(100*5, randint(Screen.TOP_BORDER, Screen.BOTTOM_BORDER - Screen.TOP_BORDER), self.monsterTypeImage, MonsterType.Orange))
 
     def make_player(self):
         self.player = Player()
@@ -47,7 +47,9 @@ class Game:
         self.player_group.update()
         self.monster_group.update()
         self.round_time += 1
-        pygame.sprite.groupcollide(self.player_group, self.monster_group, False, True)
+        self.check_collisions()
+                
+
 
     def draw(self):
         self.display.fill(Colors.BLACK)
@@ -65,9 +67,15 @@ class Game:
 
     def start_new_round(self):
         self.curr_catch = self.monsterTypeImage.get_random_type()
+        self.player.reset_poistion()
+        self.make_monsters()
 
     def check_collisions(self):
-        pass
+        collided_monster = pygame.sprite.spritecollideany(self.player, self.monster_group)
+        if collided_monster:
+            if collided_monster.type == self.curr_catch:
+                self.score += 1
+                self.start_new_round()
 
     def choose_new_target(self):
         pass    

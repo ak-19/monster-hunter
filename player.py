@@ -26,7 +26,7 @@ class Player(pygame.sprite.Sprite):
             if self.rect.x + self.velocity <= Screen.WIDTH - 64:
                 self.rect.x += self.velocity
         elif keys[pygame.K_UP]:
-            if  self.rect.y - self.velocity >= 0:
+            if  self.rect.y - self.velocity >= Screen.TOP_BORDER:
                 self.rect.y -= self.velocity
         elif keys[pygame.K_DOWN]:
             if self.rect.y + self.velocity <= Screen.HEIGHT - 64:

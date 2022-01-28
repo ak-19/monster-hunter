@@ -22,9 +22,8 @@ class MonsterTypeImage():
         return randint(0,3)
 
 class Monster(pygame.sprite.Sprite):
-    def __init__(self, x, y, monsterTypeImage: MonsterTypeImage) -> None:
+    def __init__(self, x, y, monsterTypeImage: MonsterTypeImage, monster_type: MonsterType) -> None:
         super().__init__()    
-        monster_type = monsterTypeImage.get_random_type()
         self.image = monsterTypeImage.get_image(monster_type)
         self.rect = self.image.get_rect()
         self.rect.topleft = (x, y)     
