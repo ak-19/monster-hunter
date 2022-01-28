@@ -23,10 +23,11 @@ class Game:
 
     def make_monsters(self):
         self.monster_group = pygame.sprite.Group()
-        self.monster_group.add(Monster(100*1, randint(Screen.TOP_BORDER, Screen.BOTTOM_BORDER - Screen.TOP_BORDER), self.monsterTypeImage, MonsterType.Green))
-        self.monster_group.add(Monster(100*1, randint(Screen.TOP_BORDER, Screen.BOTTOM_BORDER - Screen.TOP_BORDER), self.monsterTypeImage, MonsterType.Blue))
-        self.monster_group.add(Monster(100*5, randint(Screen.TOP_BORDER, Screen.BOTTOM_BORDER - Screen.TOP_BORDER), self.monsterTypeImage, MonsterType.Purple))
-        self.monster_group.add(Monster(100*5, randint(Screen.TOP_BORDER, Screen.BOTTOM_BORDER - Screen.TOP_BORDER), self.monsterTypeImage, MonsterType.Orange))
+        for _ in range(self.round_number):
+            self.monster_group.add(Monster(100*1, randint(Screen.TOP_BORDER, Screen.BOTTOM_BORDER - Screen.TOP_BORDER), self.monsterTypeImage, MonsterType.Green))
+            self.monster_group.add(Monster(100*1, randint(Screen.TOP_BORDER, Screen.BOTTOM_BORDER - Screen.TOP_BORDER), self.monsterTypeImage, MonsterType.Blue))
+            self.monster_group.add(Monster(100*5, randint(Screen.TOP_BORDER, Screen.BOTTOM_BORDER - Screen.TOP_BORDER), self.monsterTypeImage, MonsterType.Purple))
+            self.monster_group.add(Monster(100*5, randint(Screen.TOP_BORDER, Screen.BOTTOM_BORDER - Screen.TOP_BORDER), self.monsterTypeImage, MonsterType.Orange))
 
     def make_player(self):
         self.player = Player()
@@ -59,11 +60,11 @@ class Game:
         pygame.display.update()
 
     def start_new_game(self):
-        self.make_player()
-        self.make_monsters()
         self.score = 0
         self.round_number = 1
         self.round_time = 0
+        self.make_player()
+        self.make_monsters()
         self.curr_catch = self.monsterTypeImage.get_random_type()
 
     def start_new_round(self):
@@ -72,6 +73,7 @@ class Game:
         self.round_time = 0        
         self.curr_catch = self.monsterTypeImage.get_random_type()
         self.player.reset_poistion()
+        self.player.warps = 3
         self.make_monsters()
 
     def check_collisions(self):
@@ -111,7 +113,11 @@ class Game:
                     self.run = False    
                 elif event.type == pygame.KEYDOWN and self.pause and event.key == pygame.K_p:
                     self.pause = False
-                    self.start_new_game()                         
+                    self.start_new_game()            
+                elif event.type == pygame.KEYDOWN and self.player.warps > 0 and event.key == pygame.K_SPACE:
+                    self.player.reset_poistion()
+                    self.player.warps -= 1
+
 
             if not self.pause:
                 self.update()                        

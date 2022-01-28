@@ -13,7 +13,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.reset_poistion()
         self.sound = Sound()
-        self.warps = 2
+        self.warps = 3
         self.lives = 5
         self.velocity = 8
 
